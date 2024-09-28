@@ -117,7 +117,7 @@ t_pipex	init_pipex(int argc, char **argv, char **env)
 {
 	t_pipex	pipex;
 
-	pipex.cmd_count = argc - 3;  // Comandos intermedios sin contar infile y outfile
+	pipex.cmd_count = argc - 3;
 	pipex.input_fd = open(argv[1], O_RDONLY);
 	if (pipex.input_fd == -1)
 		perror("Error: Cannot open input file");

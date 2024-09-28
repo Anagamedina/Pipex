@@ -30,7 +30,7 @@ int main(int argc, char **argv, char **env)
 	}
 
 	free_pipex(&pipex);
-		// Aquí se continuará con la lógica de ejecución de los comandos...
+	handle_commands(&pipex);
 
 	return (EXIT_SUCCESS);
 }
