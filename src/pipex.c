@@ -10,11 +10,11 @@
 /*                                                                            */
 /* ************************************************************************** */
 
-#include <../includes/pipex.h>
+#include "../includes/pipex.h"
 
 int main(int argc, char **argv, char **env)
 {
-	t_cmd	cmd_list;
+	t_pipex	pipex;
 
 	if (argc != 5)
 	{
@@ -22,9 +22,17 @@ int main(int argc, char **argv, char **env)
 		return (EXIT_FAILURE);
 	}
 
-	//cmd = init_pipex(argc, argv, env);
+	pipex = init_pipex(argc, argv, env);
+	if (!pipex.first_cmd)
+	{
+		free_pipex(&pipex);  // Liberar si hay algún fallo
+		return (EXIT_FAILURE);
+	}
 
+	free_pipex(&pipex);
+		// Aquí se continuará con la lógica de ejecución de los comandos...
 
-
+	return (EXIT_SUCCESS);
 }
+
 	

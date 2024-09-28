@@ -13,18 +13,25 @@
 #include "../includes/pipex.h"
 
 //FUNCION PARA CREAR UN NUEVO COMANDO 
-t_cmd	*cmd_new(char str, t_pipex *pipex)
+t_cmd	*cmd_new(char *str, t_pipex *pipex)
 {
-	t_cmd	new;
+	t_cmd	*new;
 	char	*cmd_path;
 
 	new = malloc(sizeof(t_cmd));
 	if (!new)
-		perror("");
+	{
+		perror("Error: malloc failed");
+		return (NULL);
+	}
 	//separamos la cadena del comando en argumentos
 	new->argvs = ft_split(str, ' ');
-	if (!(new->args))
-		perror("");
+	if (!new->argvs)
+	{
+		perror("Error: ft_split failed");
+		free(new);
+		return (NULL);
+	}
 
 	//comprobar si el comando es accesible 
 	if (access(new->argvs[0], X_OK) != 0)
@@ -48,13 +55,15 @@ t_cmd	*create_cmd_list(t_pipex *pipex)
 	int		i;
 
 	i = 0;
-	first = cmd_new(pipex->args[2], pipex);
+	first = cmd_new(pipex->argvs[2], pipex);
+	if (!first)
+		return (NULL);
 	first->num = 2;
 	cmd = first;
 
 	while(i < pipex->cmd_count - 1)
 	{
-		new = cmd_new(pipex->args[3 + i], pipex);
+		new = cmd_new(pipex->argvs[3 + i], pipex);
 		new->num = i + 3;
 		cmd->next = new;
 		cmd = new;
@@ -91,7 +100,6 @@ char **get_path(char **env)
 	{
 		if (ft_strncmp(env[i], "PATH=", 5) == 0)
 		{
-			path_var = env[i] + 5;
 			path_var = ft_strdup(env[i] + 5);
 			break ;
 		}
@@ -101,14 +109,26 @@ char **get_path(char **env)
 	{
 		paths = ft_split(path_var, ':');
 		free(path_var);
-		return (paths);
 	}
-	return (NULL);
+	return (paths);
 }
 
-// FUNCION PARA INOCIALIZAR LA ESTRUCUTRUA DE t_PIPEX
 t_pipex	init_pipex(int argc, char **argv, char **env)
 {
 	t_pipex	pipex;
 
+	pipex.cmd_count = argc - 3;  // Comandos intermedios sin contar infile y outfile
+	pipex.input_fd = open(argv[1], O_RDONLY);
+	if (pipex.input_fd == -1)
+		perror("Error: Cannot open input file");
+	pipex.output_fd = open(argv[argc - 1], O_WRONLY | O_CREAT | O_TRUNC, 0644);
+	if (pipex.output_fd == -1)
+		perror("Error: Cannot open output file");
+	pipex.args = argv;
+	pipex.env = env;
+	pipex.path = get_path(env);
+	pipex.first_cmd = create_cmd_list(&pipex);
+
+	return (pipex);
 }
+

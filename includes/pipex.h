@@ -6,7 +6,7 @@
 /*   By: anamedin <anamedin@student.42barcel>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/19 14:27:19 by anamedin          #+#    #+#             */
-/*   Updated: 2024/09/28 12:07:26 by anamedin         ###   ########.fr       */
+/*   Updated: 2024/09/28 21:20:33 by anamedin         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -35,19 +35,24 @@ typedef struct s_cmd
 	int				output_fd; //salida
 }				t_cmd;
 
-typedef struct s_pipex
+typedef struct s_pipex		args;  //argumentos del programax
 {
 	t_cmd			*first_cmd;  //primer comando de la lista enlazada
 	char			**path;     // array de rutas de posibles ubi de comandos
-	int				cmd_count;  //numero total de comandos
+	int				cmd_count; //numero total de comandos
+	char			args;  //argumentos del programa:
 	char			**env;   //varible de entorno
 	int				input_fd;
 	int				output_fd;
-}			t_pipex;
+}				t_pipex;
 
 
 /********     FUNCTIONS      *******/
 
+t_cmd		*cmd_new(char *str, t_pipex *pipex);
+t_cmd		*create_cmd_list(t_pipex *pipex);
+char 		**get_path(char **env);
+t_pipex		init_pipex(int argc, char **argv, char **env);
+int 		main(int argc, char **argv, char **env);
 
-
-#endif 
+#endif
