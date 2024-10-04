@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   pipex.h                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: anamedin <anamedin@student.42barcel>       +#+  +:+       +#+        */
+/*   By: anamedin <anamedin@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/19 14:27:19 by anamedin          #+#    #+#             */
-/*   Updated: 2024/09/28 21:20:33 by anamedin         ###   ########.fr       */
+/*   Updated: 2024/10/04 14:12:34 by anamedin         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -35,12 +35,12 @@ typedef struct s_cmd
 	int				output_fd; //salida
 }				t_cmd;
 
-typedef struct s_pipex		args;  //argumentos del programax
+typedef struct s_pipex  //argumentos del programax
 {
 	t_cmd			*first_cmd;  //primer comando de la lista enlazada
 	char			**path;     // array de rutas de posibles ubi de comandos
 	int				cmd_count; //numero total de comandos
-	char			args;  //argumentos del programa:
+	char			**argvs;  //argumentos del programa:
 	char			**env;   //varible de entorno
 	int				input_fd;
 	int				output_fd;
@@ -54,5 +54,8 @@ t_cmd		*create_cmd_list(t_pipex *pipex);
 char 		**get_path(char **env);
 t_pipex		init_pipex(int argc, char **argv, char **env);
 int 		main(int argc, char **argv, char **env);
+void 		execute_child(t_cmd *cmd, t_pipex *pipex, int *prev_pipe);
+void 		execute_parent(t_cmd *cmd, int *prev_pipe);
+void 		handle_commands(t_pipex *pipex);
 
 #endif

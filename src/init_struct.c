@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   init_struct.c                                      :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: anamedin <anamedin@student.42barcel>       +#+  +:+       +#+        */
+/*   By: anamedin <anamedin@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/28 13:38:11 by anamedin          #+#    #+#             */
-/*   Updated: 2024/09/28 19:25:13 by anamedin         ###   ########.fr       */
+/*   Updated: 2024/10/04 14:19:45 by anamedin         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -40,7 +40,7 @@ t_cmd	*cmd_new(char *str, t_pipex *pipex)
 		//if (cmd_path == NULL || access(cmd_path, X_OK))
 			//perrro("");
 	}
-	new->next = NULL //establecer que no hay comando por ahora 
+	new->next = NULL;//establecer que no hay comando por ahora 
 	return(new);
 
 
@@ -113,6 +113,10 @@ char **get_path(char **env)
 	return (paths);
 }
 
+
+/******************function principal *********************/
+
+
 t_pipex	init_pipex(int argc, char **argv, char **env)
 {
 	t_pipex	pipex;
@@ -124,7 +128,7 @@ t_pipex	init_pipex(int argc, char **argv, char **env)
 	pipex.output_fd = open(argv[argc - 1], O_WRONLY | O_CREAT | O_TRUNC, 0644);
 	if (pipex.output_fd == -1)
 		perror("Error: Cannot open output file");
-	pipex.args = argv;
+	pipex.argvs = argv;
 	pipex.env = env;
 	pipex.path = get_path(env);
 	pipex.first_cmd = create_cmd_list(&pipex);
