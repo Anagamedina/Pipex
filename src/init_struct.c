@@ -6,17 +6,17 @@
 /*   By: anamedin <anamedin@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/28 13:38:11 by anamedin          #+#    #+#             */
-/*   Updated: 2024/10/04 14:19:45 by anamedin         ###   ########.fr       */
+/*   Updated: 2024/10/04 18:42:22 by anamedin         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../includes/pipex.h"
 
 //FUNCION PARA CREAR UN NUEVO COMANDO 
-t_cmd	*cmd_new(char *str, t_pipex *pipex)
+t_cmd	*cmd_new(char *str) //t_pipex *pipex)
 {
 	t_cmd	*new;
-	char	*cmd_path;
+	//char 	*cmd_path;
 
 	new = malloc(sizeof(t_cmd));
 	if (!new)
@@ -55,7 +55,7 @@ t_cmd	*create_cmd_list(t_pipex *pipex)
 	int		i;
 
 	i = 0;
-	first = cmd_new(pipex->argvs[2], pipex);
+	first = cmd_new(pipex->argvs[2]); //pipex);
 	if (!first)
 		return (NULL);
 	first->num = 2;
@@ -63,12 +63,13 @@ t_cmd	*create_cmd_list(t_pipex *pipex)
 
 	while(i < pipex->cmd_count - 1)
 	{
-		new = cmd_new(pipex->argvs[3 + i], pipex);
+		new = cmd_new(pipex->argvs[3 + i]); //pipex);
 		new->num = i + 3;
 		cmd->next = new;
 		cmd = new;
 		i++;
 	}
+
 	return (first);
 }
 /*
@@ -86,6 +87,22 @@ PATH=
 :/Users/catalinaburgos/Library/Application Support/JetBrains/Toolbox/scripts
 :/Users/catalinaburgos/Library/Python/3.9/bin
 */ 
+
+
+void print_paths(char **paths)
+{
+	int i = 0;
+	if(paths == NULL)
+	{
+		printf("NO paths found. \n");
+		return;
+	}
+	while(paths[i])
+	{
+		printf("path[%d]: %s\n", i, paths[i]);
+		i++;
+	}
+}
 
 char **get_path(char **env)
 {
@@ -131,6 +148,7 @@ t_pipex	init_pipex(int argc, char **argv, char **env)
 	pipex.argvs = argv;
 	pipex.env = env;
 	pipex.path = get_path(env);
+	print_paths(pipex.path);
 	pipex.first_cmd = create_cmd_list(&pipex);
 
 	return (pipex);

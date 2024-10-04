@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   libft.h                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: anamedin <anamedin@student.42barcel>       +#+  +:+       +#+        */
+/*   By: anamedin <anamedin@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/09 18:28:11 by anamedin          #+#    #+#             */
-/*   Updated: 2024/09/28 12:58:10 by anamedin         ###   ########.fr       */
+/*   Updated: 2024/10/04 17:59:21 by anamedin         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,6 +18,8 @@
 # include <stddef.h>
 # include <stdio.h>
 # include <string.h>
+#include <fcntl.h> 
+#include <stdarg.h>
 
 typedef struct s_list
 {

@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   ft_split.c                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: anamedin <anamedin@student.42barcel>       +#+  +:+       +#+        */
+/*   By: anamedin <anamedin@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/29 20:02:07 by anamedin          #+#    #+#             */
-/*   Updated: 2024/02/19 15:24:05 by anamedin         ###   ########.fr       */
+/*   Updated: 2024/10/04 17:47:35 by anamedin         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -57,7 +57,7 @@ static char	*ft_new_str(const char *s, int start, int end)
 	return (str);
 }
 
-static void	*ft_free(char **matrix, int count)
+static void	*ft_free_split(char **matrix, int count)
 {
 	int	i;
 
@@ -90,7 +90,7 @@ char	**ft_split(const char *s, char c)
 		{
 			new_matrix[j] = ft_new_str(s, index_substr, i);
 			if (!(new_matrix[j]))
-				return (ft_free(new_matrix, j));
+				return (ft_free_split(new_matrix, j));
 			index_substr = -1;
 			j++;
 		}

@@ -6,10 +6,13 @@
 /*   By: anamedin <anamedin@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/28 23:08:09 by anamedin          #+#    #+#             */
-/*   Updated: 2024/10/04 12:42:43 by anamedin         ###   ########.fr       */
+/*   Updated: 2024/10/04 19:32:20 by anamedin         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
+
+
+//HIJO PRIMERO USANDO UN PREV_PIPE PARA COMUNICAR MEJOR
 void execute_child(t_cmd *cmd, t_pipex *pipex, int *prev_pipe)
 {
 	pid_t pid = fork();
@@ -28,9 +31,12 @@ void execute_child(t_cmd *cmd, t_pipex *pipex, int *prev_pipe)
 			close(prev_pipe[0]);
 			close(prev_pipe[1]);
 		}
-
+//ls y grep
+//salida->ls como entrada ->grep
+//crear una pipe y dup2 para redirigir STDOUT a la pipe
+//en le segundo child dup2(STDIN_FILENO)para que grep lea la salida de ls
 	
-		if (cmd->next)
+		if (cmd->next) // si hay un comando next crea una nueva pipe
 		{
 			int pipe_fd[2];
 			pipe(pipe_fd);
@@ -47,7 +53,7 @@ void execute_child(t_cmd *cmd, t_pipex *pipex, int *prev_pipe)
 	}
 }
 
-void execute_parent(t_cmd *cmd, int *prev_pipe)
+void execute_parent(int *prev_pipe)
 {
 	if (prev_pipe)
 		close(prev_pipe[0]);
@@ -55,6 +61,10 @@ void execute_parent(t_cmd *cmd, int *prev_pipe)
 	wait(NULL);
 }
 
+
+
+
+/*********************** principal******* */
 void handle_commands(t_pipex *pipex)
 {
 	t_cmd *cmd;
@@ -63,12 +73,23 @@ void handle_commands(t_pipex *pipex)
 	int pipe_fd[2];
 
 	while (cmd)
-	{
-		// execute_child();
-
-		// execute_parent();
-
-		cmd = cmd->next;
+	{ 
+		if (cmd->next)
+		{
+			if(pipe(pipe_fd) == -1)
+			{
+				perror("Error: pipe creation");
+				exit(EXIT_FAILURE);
+			}
+		}
+		else
+		{
+			pipe_fd[0] = -1;
+			pipe_fd[1] = -1;
+			execute_child(cmd, pipex, pipe_fd);
+			execute_parent(pipe_fd);
+			cmd = cmd->next;
+			
+		}
 	}
 }
-

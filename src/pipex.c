@@ -6,7 +6,7 @@
 /*   By: anamedin <anamedin@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/28 12:08:49 by anamedin          #+#    #+#             */
-/*   Updated: 2024/10/04 12:32:27 by anamedin         ###   ########.fr       */
+/*   Updated: 2024/10/04 18:00:57 by anamedin         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,12 +25,12 @@ int main(int argc, char **argv, char **env)
 	pipex = init_pipex(argc, argv, env);
 	if (!pipex.first_cmd)
 	{
-		free_pipex(&pipex);  // Liberar si hay algún fallo
+		//free_pipex(&pipex);  // Liberar si hay algún fallo
 		return (EXIT_FAILURE);
 	}
 
-	free_pipex(&pipex);
-	handle_commands(&pipex);
+	//free_pipex(&pipex);
+	// handle_commands(&pipex);
 
 	return (EXIT_SUCCESS);
 }
