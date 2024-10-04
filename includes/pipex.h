@@ -6,7 +6,7 @@
 /*   By: anamedin <anamedin@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/19 14:27:19 by anamedin          #+#    #+#             */
-/*   Updated: 2024/10/04 18:18:26 by anamedin         ###   ########.fr       */
+/*   Updated: 2024/10/04 23:40:07 by anamedin         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,7 +14,7 @@
 #define PIPEX_H
 
 #include <unistd.h> //flork, pipe // dup2 // exceve // close // read // write//
-#include <stdlib.h> //malooc // free // exit 
+#include <stdlib.h> //malloc // free // exit 
 #include <stdio.h> //perror // printf 
 #include <fcntl.h> //open // 
 #include <sys/wait.h> // wait // waitid
@@ -57,8 +57,8 @@ t_cmd		*create_cmd_list(t_pipex *pipex);
 char 		**get_path(char **env);
 t_pipex		init_pipex(int argc, char **argv, char **env);
 int 		main(int argc, char **argv, char **env);
-// void 		execute_child(t_cmd *cmd, t_pipex *pipex, int *prev_pipe);
-// void 		execute_parent(t_cmd *cmd, int *prev_pipe);
-// void 		handle_commands(t_pipex *pipex);
+void 		execute_child(t_cmd *cmd, t_pipex *pipex, int *prev_pipe);
+void 		execute_parent(int *prev_pipe);
+void 		handle_commands(t_pipex *pipex);
 
 #endif

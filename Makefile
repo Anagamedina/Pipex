@@ -6,7 +6,7 @@
 #    By: anamedin <anamedin@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2024/09/19 14:26:38 by anamedin          #+#    #+#              #
-#    Updated: 2024/10/04 18:03:48 by anamedin         ###   ########.fr        #
+#    Updated: 2024/10/04 22:16:20 by anamedin         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -20,7 +20,8 @@ LIBFT_DIR = libft
 PIPEX_H = includes/pipex.h
 
 SRC = $(SRC_DIR)/pipex.c \
-		$(SRC_DIR)/init_struct.c 
+		$(SRC_DIR)/init_struct.c \
+		$(SRC_DIR)/process_execution.c 
 
 OBJ = $(SRC:$(SRC_DIR)/%.c=$(OBJ_DIR)/%.o)
 

@@ -6,17 +6,42 @@
 /*   By: anamedin <anamedin@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/28 13:38:11 by anamedin          #+#    #+#             */
-/*   Updated: 2024/10/04 18:42:22 by anamedin         ###   ########.fr       */
+/*   Updated: 2024/10/04 23:37:58 by anamedin         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../includes/pipex.h"
 
+char *get_cmd_path(char *cmd, char **paths)
+{
+    char *cmd_path;
+    char *full_path;
+    int i;
+
+    i = 0;
+    while (paths[i])
+    {
+        full_path = ft_strjoin(paths[i], "/"); // Concatenar la ruta y "/"
+        cmd_path = ft_strjoin(full_path, cmd); // Concatenar el comando
+        free(full_path); // Liberar la memoria usada para concatenar "/"
+
+        if (access(cmd_path, X_OK) == 0) // Comprobar si el comando es accesible
+            return (cmd_path); // Devolver la ruta completa del comando
+
+        free(cmd_path); // Liberar la memoria si no es accesible
+        i++;
+    }
+    return (NULL); // Retorna NULL si no se encontró el comando
+}
+
+
+
+
 //FUNCION PARA CREAR UN NUEVO COMANDO 
 t_cmd	*cmd_new(char *str) //t_pipex *pipex)
 {
 	t_cmd	*new;
-	//char 	*cmd_path;
+	char 	*cmd_path;
 
 	new = malloc(sizeof(t_cmd));
 	if (!new)
@@ -33,13 +58,22 @@ t_cmd	*cmd_new(char *str) //t_pipex *pipex)
 		return (NULL);
 	}
 
-	//comprobar si el comando es accesible 
-	if (access(new->argvs[0], X_OK) != 0)
-	{
-		//cmd_path = get_cmd_path(new->argvs[0], pipex->path);
-		//if (cmd_path == NULL || access(cmd_path, X_OK))
-			//perrro("");
-	}
+	// Obtener la ruta del comando
+        cmd_path = get_cmd_path(cmd->argvs[0], pipex->path);
+        if (!cmd_path)
+        {
+            perror("Error: Command not found");
+            exit(EXIT_FAILURE);
+        }
+
+        printf("Trying to execute: %s\n", cmd_path);
+        if (execve(cmd_path, cmd->argvs, pipex->env) == -1)
+        {
+            perror("Error: Command execution failed");
+            free(cmd_path);
+            exit(EXIT_FAILURE);
+        }
+        free(cmd_path);
 	new->next = NULL;//establecer que no hay comando por ahora 
 	return(new);
 
@@ -55,7 +89,7 @@ t_cmd	*create_cmd_list(t_pipex *pipex)
 	int		i;
 
 	i = 0;
-	first = cmd_new(pipex->argvs[2]); //pipex);
+	first = cmd_new(pipex->argvs[2]);
 	if (!first)
 		return (NULL);
 	first->num = 2;
@@ -63,7 +97,7 @@ t_cmd	*create_cmd_list(t_pipex *pipex)
 
 	while(i < pipex->cmd_count - 1)
 	{
-		new = cmd_new(pipex->argvs[3 + i]); //pipex);
+		new = cmd_new(pipex->argvs[3 + i]);
 		new->num = i + 3;
 		cmd->next = new;
 		cmd = new;
@@ -139,16 +173,16 @@ t_pipex	init_pipex(int argc, char **argv, char **env)
 	t_pipex	pipex;
 
 	pipex.cmd_count = argc - 3;
+	pipex.argvs = argv;
 	pipex.input_fd = open(argv[1], O_RDONLY);
 	if (pipex.input_fd == -1)
-		perror("Error: Cannot open input file");
+		perror("Error: Cannot open INPUT file");
 	pipex.output_fd = open(argv[argc - 1], O_WRONLY | O_CREAT | O_TRUNC, 0644);
 	if (pipex.output_fd == -1)
-		perror("Error: Cannot open output file");
-	pipex.argvs = argv;
+		perror("Error: Cannot open OUTPUT file");
 	pipex.env = env;
 	pipex.path = get_path(env);
-	print_paths(pipex.path);
+	// print_paths(pipex.path);
 	pipex.first_cmd = create_cmd_list(&pipex);
 
 	return (pipex);
