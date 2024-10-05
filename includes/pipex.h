@@ -6,7 +6,7 @@
 /*   By: anamedin <anamedin@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/19 14:27:19 by anamedin          #+#    #+#             */
-/*   Updated: 2024/10/05 14:30:21 by anamedin         ###   ########.fr       */
+/*   Updated: 2024/10/05 18:51:37 by anamedin         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -59,7 +59,7 @@ t_cmd		*create_cmd_list(t_pipex *pipex);
 char 		**get_path(char **env);
 t_pipex		init_pipex(int argc, char **argv, char **env);
 int 		main(int argc, char **argv, char **env);
-void 		execute_child(t_cmd *cmd, t_pipex *pipex, int *prev_pipe);
+void 		execute_child(t_pipex *pipex, t_cmd *cmd, int *pipe_fd);
 void 		execute_parent(int *prev_pipe);
 void 		handle_commands(t_pipex *pipex);
 void 		print_paths(char **paths);
