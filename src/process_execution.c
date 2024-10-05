@@ -30,22 +30,17 @@ void execute_child(t_cmd *cmd, t_pipex *pipex, int *prev_pipe)
 		{
             printf("Redirecting input from previous pipe FD: %d\n", prev_pipe[0]);
 			dup2(prev_pipe[0], STDIN_FILENO); // entrada infile
-			close(prev_pipe[0]); // Cerrar lectura del pipe
+			dup2(pipex->output_fd, STDOUT_FILENO);
             close(prev_pipe[1]); // Cerrar escritura del pipe
-		}
-	
+            close(pipex->output_fd); 
+		
+        }
 		if (cmd->next) 
         {
-            int pipe_fd[2];
-            if (pipe(pipe_fd) == -1) // Crear el pipe
-            {
-                perror("Error: Pipe creation failed");
-                exit(EXIT_FAILURE);
-            }
-            printf("Redirecting output to pipe FD: %d\n", pipe_fd[1]);
-            dup2(pipe_fd[1], STDOUT_FILENO); //salida estándar al pipe
-            // close(pipe_fd[0]); // Cerrar el descriptor de lectura del pipe
-            close(pipe_fd[1]); // Cerrar  escritura del pipe
+           
+            printf("Redirecting output to pipe FD: %d\n", prev_pipe[1]);
+            dup2(prev_pipe[1], STDOUT_FILENO); //salida estándar al pipe
+            close(prev_pipe[0]); // Cerrar  escritura del pipe
         }
 
 
@@ -70,16 +65,6 @@ void execute_child(t_cmd *cmd, t_pipex *pipex, int *prev_pipe)
 	}
 }
 
-void execute_parent(int *prev_pipe)
-{
-    if (prev_pipe)
-    {
-        close(prev_pipe[0]); // Cerrar lectura del pipe en el padre
-        close(prev_pipe[1]); // Cerrar el descriptor de escritura del pipe
-    }
-    wait(NULL); // Esperar a que el proceso hijo termine
-}
-
 
 
 /******* Manejar la ejecución de los comandos************/
@@ -97,21 +82,24 @@ void handle_commands(t_pipex *pipex)
                 perror("Error: Pipe creation failed");
                 exit(EXIT_FAILURE);
             }
-        }
-        else
-        {
-            pipe_fd[0] = -1; // No hay pipe si es el último comando
-            pipe_fd[1] = -1;
+        /*deberia redireccionar la salida de la estandar al pipe*/
         }
 
-        if (cmd->next)
-			execute_child(cmd, pipex, pipe_fd);
-        else
-			execute_child(cmd, pipex, NULL);
-
-        if (cmd->next)
-			execute_parent(pipe_fd);
+    
+		execute_child(cmd, pipex, pipe_fd);
+ 
+        wait(NULL); // Esperar a que el proceso hijo termine
+      
 
         cmd = cmd->next;
+    }
+    if (pipe_fd[0])
+    {
+        close(pipe_fd[0]); // Cerrar lectura del pipe en el padre
+    }
+    
+    if (pipe_fd[1])
+    {
+        close(pipe_fd[1]);
     }
 }

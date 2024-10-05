@@ -1,0 +1,17 @@
+Redirecting output to pipe FD: 6
+arg[0]: /usr/bin/ls
+arg[1]: -l
+Trying to execute: /usr/bin/ls
+total 1596
+drwxr-xr-x 2 anamedin 2023_barcelona      21 Oct  3 17:54 includes
+-rw-r--r-- 1 anamedin 2023_barcelona      20 Oct  4 18:27 infile.txt
+drwxr-xr-x 2 anamedin 2023_barcelona    4096 Oct  5 15:51 libft
+-rw-r--r-- 1 anamedin 2023_barcelona    1763 Oct  5 14:29 Makefile
+drwxr-xr-x 2 anamedin 2023_barcelona      84 Oct  5 15:51 obj
+-rw-r--r-- 1 anamedin 2023_barcelona      95 Oct  5 15:51 outfile.txt
+-rwxr-xr-x 1 anamedin 2023_barcelona   21712 Oct  5 15:51 pipex
+drwxr-xr-x 2 anamedin 2023_barcelona     124 Oct  5 13:11 src
+-rw-r--r-- 1 anamedin 2023_barcelona 1591512 Oct  3 17:54 subject.pdf
+arg[0]: /usr/bin/wc
+arg[1]: -l
+Trying to execute: /usr/bin/wc
