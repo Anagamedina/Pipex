@@ -6,7 +6,7 @@
 /*   By: anamedin <anamedin@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/28 13:38:11 by anamedin          #+#    #+#             */
-/*   Updated: 2024/10/12 20:51:53 by anamedin         ###   ########.fr       */
+/*   Updated: 2024/10/13 01:24:56 by anamedin         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,7 +16,7 @@
 t_cmd	*cmd_new(char *str, char **paths)
 {
 	t_cmd	*new;
-	char 	*cmd_path;
+	char	*cmd_path;
 
 	new = malloc(sizeof(t_cmd));
 	if (!new)
@@ -24,7 +24,6 @@ t_cmd	*cmd_new(char *str, char **paths)
 		perror("Error: malloc failed");
 		return (NULL);
 	}
-	// Separar la cadena del comando en argumentos
 	new->cmd_args = ft_split(str, ' ');
 	if (!new->cmd_args)
 	{
@@ -32,8 +31,6 @@ t_cmd	*cmd_new(char *str, char **paths)
 		free(new);
 		return (NULL);
 	}
-
-	// Obtener la ruta del comando
 	cmd_path = get_cmd_path(new->cmd_args[0], paths); 
 	if (!cmd_path)
 	{
@@ -42,17 +39,12 @@ t_cmd	*cmd_new(char *str, char **paths)
 		free(new);
 		return (NULL);
 	}
-
 	printf("Command path found: %s\n", cmd_path);
-	// Guardar la ruta del comando en cmd_args[0]
 	free(new->cmd_args[0]);
-	new->cmd_args[0] = cmd_path;  // Reemplazar el comando con su ruta completa
-
-	new->next = NULL
+	new->cmd_args[0] = cmd_path;
+	new->next = NULL;
 	return (new);
 }
-
-
 
 t_cmd	*create_cmd_list(t_pipex *pipex)
 {
@@ -65,10 +57,9 @@ t_cmd	*create_cmd_list(t_pipex *pipex)
 	first = cmd_new(pipex->argvs[2], pipex->path);
 	if (!first)
 		return (NULL);
-	first->cmd_id= 2;
+	first->cmd_id = 2;
 	cmd = first;
-
-	while(i < pipex->cmd_count - 1)
+	while (i < pipex->cmd_count - 1)
 	{
 		new = cmd_new(pipex->argvs[3 + i], pipex->path);
 		new->cmd_id = i + 3;
@@ -76,14 +67,12 @@ t_cmd	*create_cmd_list(t_pipex *pipex)
 		cmd = new;
 		i++;
 	}
-
 	return (first);
 }
 
-
-char **get_path(char **env)
+char	**get_path(char **env)
 {
-	char	**paths; //array para almacenar las rutas
+	char	**paths;
 	char	*path_var;
 	int		i;
 
@@ -107,15 +96,12 @@ char **get_path(char **env)
 	return (paths);
 }
 
-
 /******************function principal *********************/
-
-
 t_pipex	init_pipex(int argc, char **argv, char **env)
 {
 	t_pipex	pipex;
 
-  	pipex.cmd_count = argc - 3;
+  	pipex.cmd_count = (argc - 3);
     pipex.argvs = argv;
 
     pipex.input_fd = open(argv[1], O_RDONLY);
@@ -124,7 +110,6 @@ t_pipex	init_pipex(int argc, char **argv, char **env)
         perror("Error: Cannot open INPUT file");
         exit(EXIT_FAILURE); 
     }
-
     pipex.output_fd = open(argv[argc - 1], O_WRONLY | O_CREAT | O_TRUNC, 0644);
     if (pipex.output_fd == -1)
     {
@@ -132,13 +117,9 @@ t_pipex	init_pipex(int argc, char **argv, char **env)
         close(pipex.input_fd);
 		exit(EXIT_FAILURE);
 	}
-
     pipex.env = env;
     pipex.path = get_path(env); 
     // print_paths(pipex.path);
-
     pipex.first_cmd = create_cmd_list(&pipex);
-
-    return pipex;
+    return (pipex);
 }	
-

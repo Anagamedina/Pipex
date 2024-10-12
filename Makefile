@@ -6,7 +6,7 @@
 #    By: anamedin <anamedin@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2024/09/19 14:26:38 by anamedin          #+#    #+#              #
-#    Updated: 2024/10/05 14:29:46 by anamedin         ###   ########.fr        #
+#    Updated: 2024/10/12 21:04:35 by anamedin         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -22,7 +22,8 @@ PIPEX_H = includes/pipex.h
 SRC = $(SRC_DIR)/pipex.c \
 		$(SRC_DIR)/init_struct.c \
 		$(SRC_DIR)/process_execution.c \
-		$(SRC_DIR)/paths.c 
+		$(SRC_DIR)/paths.c \
+		$(SRC_DIR)/free_errors.c 
 
 OBJ = $(SRC:$(SRC_DIR)/%.c=$(OBJ_DIR)/%.o)
 

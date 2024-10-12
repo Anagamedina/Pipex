@@ -6,59 +6,125 @@
 /*   By: anamedin <anamedin@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/28 22:45:27 by anamedin          #+#    #+#             */
-/*   Updated: 2024/10/04 12:24:19 by anamedin         ###   ########.fr       */
+/*   Updated: 2024/10/13 01:25:09 by anamedin         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../includes/pipex.h"
 
-void free_cmd(t_cmd *cmd)
+/*void free_cmd(t_cmd *cmd)
 {
 	int i;
 
 	if (cmd)
 	{
-		if (cmd->argvs)
+		if (cmd->cmd_args)
 		{
 			i = 0;
-			while (cmd->argvs[i])
+			while (cmd->cmd_args)
 			{
-				free(cmd->argvs[i]);
+				free(cmd->cmd_args);
 				i++;
 			}
-			free(cmd->argvs);
+			free(cmd->cmd_args);
 		}
 		free(cmd);
 	}
 }
-
-void free_cmd_list(t_cmd *cmd_list)
+void	free_cmd_list(t_cmd *cmd_list)
 {
-	t_cmd *tmp;
+    t_cmd	*tmp;
+	int		i;
+	
+	i = 0; 
+    tmp = cmd_list;
+    while (cmd_list->next != NULL)
+    {
+		tmp = cmd_list;
+		cmd_list = cmd_list->next;
+		free_cmd(tmp);
+    }
+}*/
 
-	while (cmd_list)
+void free_cmd(t_cmd *cmd)
+ {
+    if (cmd) 
 	{
-		tmp = cmd_list->next;
-		free_cmd(cmd_list);
-		cmd_list = tmp;
-	}
+        free(cmd->cmd_args); 
+		// free(cmd->path); 
+		free(cmd);
+    }
 }
 
-void free_pipex(t_pipex *pipex)
+void free_cmd_list(t_cmd *cmd_list) {
+    t_cmd *tmp;
+
+    while (cmd_list) {
+        tmp = cmd_list;
+        cmd_list = cmd_list->next;  // Asumiendo que tienes un campo 'next'
+        free_cmd(tmp);              // Libera el comando actual
+    }
+}
+
+
+void free_paths(t_pipex pipex)
 {
 	int i;
 
-	if (pipex->path)
+	if (pipex.path)
 	{
 		i = 0;
-		while (pipex->path[i])
+		while (pipex.path[i])
 		{
-			free(pipex->path[i]);
+			free(pipex.path[i]);
 			i++;
 		}
-		free(pipex->path);
+		free(pipex.path);
 	}
-
-	if (pipex->first_cmd)
-		free_cmd_list(pipex->first_cmd);
 }
+
+
+void free_pipex(t_pipex pipex)
+{
+	free_paths(pipex);
+	free_cmd_list(pipex.first_cmd);
+}
+
+
+
+// Función para imprimir la estructura t_pipex
+/*void print_pipex(t_pipex *pipex)
+{
+    t_cmd *current_cmd = pipex->first_cmd;
+
+    printf("Pipex Structure:\n");
+    printf("Command Count: %d\n", pipex->cmd_count);
+    printf("Input File Descriptor: %d\n", pipex->input_fd);
+    printf("Output File Descriptor: %d\n", pipex->output_fd);
+    
+    printf("Paths:\n");
+    int i = 0;
+    while (pipex->path[i] != NULL)
+    {
+        printf("  path[%d]: %s\n", i, pipex->path[i]);
+        i++;
+    }
+    
+    printf("Commands:\n");
+    while (current_cmd != NULL)
+    {
+        printf("  Command Number: %d\n", current_cmd->cmd_id);
+        printf("  Arguments:\n");
+        
+        int j = 0;
+        while (current_cmd->cmd_args[j] != NULL)
+        {
+            printf("    arg[%d]: %s\n", j, current_cmd->cmd_args[j]);
+            j++;
+        }
+
+        printf("  Pipe FD: [%d, %d]\n", current_cmd->pipe[0], current_cmd->pipe[1]);
+        
+        current_cmd = current_cmd->next;
+    }
+}*/
