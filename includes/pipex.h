@@ -6,7 +6,7 @@
 /*   By: anamedin <anamedin@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/19 14:27:19 by anamedin          #+#    #+#             */
-/*   Updated: 2024/10/05 18:51:37 by anamedin         ###   ########.fr       */
+/*   Updated: 2024/10/12 20:50:09 by anamedin         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,10 +19,7 @@
 #include <fcntl.h> //open // 
 #include <sys/wait.h> // wait // waitid
 #include <sys/types.h> //pid_t
-#include "libft.h" //pid_t
-
-
-/**********   ERROR MACROS *******/
+#include "libft.h"
 
 
 /********     STRUCTS      *******/

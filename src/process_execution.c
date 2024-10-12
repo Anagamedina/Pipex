@@ -15,7 +15,6 @@
 
 void execute_child(t_pipex *pipex, t_cmd *cmd, int *pipe_fd)
 {
-    // Crear un proceso hijo para cmd1
     pid_t pid = fork();
     if (pid < 0)
     {
@@ -23,19 +22,19 @@ void execute_child(t_pipex *pipex, t_cmd *cmd, int *pipe_fd)
         exit(EXIT_FAILURE);
     }
 
-    if (pid == 0)  // Proceso hijo para cmd1
+    if (pid == 0)
     {
         dup2(pipe_fd[1], STDOUT_FILENO);
-        close(pipe_fd[0]);
         close(pipe_fd[1]);
-
-        // Ejecutar el primer comando con `execve`
+        close(pipe_fd[0]);
+        
+        dup2(pipex->input_fd, STDIN_FILENO);
+        close(pipex->input_fd);
         execve(cmd->cmd_args[0], cmd->cmd_args, pipex->argvs);
         perror("execve failed"); 
         exit(EXIT_FAILURE);
     }
-
-    // Crear un proceso hijo para cmd2
+    close(pipe_fd[1]); // importamte!
     pid_t pid2 = fork();
     if (pid2 < 0)
     {
@@ -43,7 +42,7 @@ void execute_child(t_pipex *pipex, t_cmd *cmd, int *pipe_fd)
         exit(EXIT_FAILURE);
     }
 
-    if (pid2 == 0)  // Proceso hijo para cmd2
+    if (pid2 == 0)
     {
         dup2(pipe_fd[0], STDIN_FILENO); 
         close(pipe_fd[1]); 
@@ -78,6 +77,7 @@ void handle_commands(t_pipex *pipex)
             exit(EXIT_FAILURE);
         }
         execute_child(pipex, cmd, pipe_fd);
+        write(2, "entro\n", 6);
         cmd = cmd->next;
     }
 }

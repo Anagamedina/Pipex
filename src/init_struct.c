@@ -6,7 +6,7 @@
 /*   By: anamedin <anamedin@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/28 13:38:11 by anamedin          #+#    #+#             */
-/*   Updated: 2024/10/05 14:52:06 by anamedin         ###   ########.fr       */
+/*   Updated: 2024/10/12 20:51:53 by anamedin         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -48,7 +48,7 @@ t_cmd	*cmd_new(char *str, char **paths)
 	free(new->cmd_args[0]);
 	new->cmd_args[0] = cmd_path;  // Reemplazar el comando con su ruta completa
 
-	new->next = NULL;  // Inicialmente, no hay siguiente comando
+	new->next = NULL
 	return (new);
 }
 
@@ -118,28 +118,26 @@ t_pipex	init_pipex(int argc, char **argv, char **env)
   	pipex.cmd_count = argc - 3;
     pipex.argvs = argv;
 
-    // Abrir el archivo de entrada
     pipex.input_fd = open(argv[1], O_RDONLY);
     if (pipex.input_fd == -1)
     {
         perror("Error: Cannot open INPUT file");
-        exit(EXIT_FAILURE); // Terminar el programa si no se puede abrir
+        exit(EXIT_FAILURE); 
     }
 
-    // Abrir el archivo de salida
     pipex.output_fd = open(argv[argc - 1], O_WRONLY | O_CREAT | O_TRUNC, 0644);
     if (pipex.output_fd == -1)
     {
         perror("Error: Cannot open OUTPUT file");
-        close(pipex.input_fd); // Cerrar el archivo de entrada antes de salir
-        exit(EXIT_FAILURE); // Terminar el programa si no se puede abrir
-    }
+        close(pipex.input_fd);
+		exit(EXIT_FAILURE);
+	}
 
     pipex.env = env;
-    pipex.path = get_path(env); // Asumiendo que get_path está definida en otra parte
-    // print_paths(pipex.path); // Puedes descomentar esto si necesitas imprimir las rutas
+    pipex.path = get_path(env); 
+    // print_paths(pipex.path);
 
-    pipex.first_cmd = create_cmd_list(&pipex); // Asegúrate de que esta función maneje los errores adecuadamente
+    pipex.first_cmd = create_cmd_list(&pipex);
 
     return pipex;
 }	
