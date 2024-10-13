@@ -6,7 +6,7 @@
 /*   By: anamedin <anamedin@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/28 13:38:11 by anamedin          #+#    #+#             */
-/*   Updated: 2024/10/13 17:12:05 by anamedin         ###   ########.fr       */
+/*   Updated: 2024/10/14 01:00:41 by anamedin         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,37 +28,23 @@ t_cmd	*cmd_new(char *str, char **paths)
 	if (!new->cmd_args)
 	{
 		perror("Error: ft_split failed");
-		free(new);
+		// free(new);
 		return (NULL);
 	}
-	//-----------------------------------------------------------
-	// verificacion si arcvio existe y comando
-	if (access(new->cmd_args[0], F_OK) == -1)
-	{
-		perror("Error: Command not found F_OK ");
-//		free_split_result(new->cmd_args);
-		free(new);
-		return (NULL);
-	}
-	if (access(new->cmd_args[0], X_OK) == -1)
-	{
-		perror("Error: Permission denied  X_OK");
-//		free_split_result(new->cmd_args);
-		free(new);
-		return (NULL);
-	}
-	//-----------------------------------------------------------
 	cmd_path = get_cmd_path(new->cmd_args[0], paths);
-	if (!cmd_path)
+	// printf("%s\n", cmd_path);
+
+	if (cmd_path == NULL)
 	{
-		perror("Error: Command not found hereee");
-//		free_split_result(new->cmd_args);
-		free(new);
+		perror("Error: Command not found here!!");
+		// free_split_result(new->cmd_args);
+		// free(new);
+		// printf("cmd_new() -> NULL\n");
 		return (NULL);
 	}
-	printf("Command path found: %s\n", cmd_path);
-	free(new->cmd_args[0]);
+	// printf("Command path found: %s\n", cmd_path);
 	new->cmd_args[0] = cmd_path;
+	// free(new->cmd_args[0]);
 	new->next = NULL;
 	return (new);
 }
@@ -73,17 +59,27 @@ t_cmd	*create_cmd_list(t_pipex *pipex)
 	i = 0;
 	first = cmd_new(pipex->argvs[2], pipex->path);
 	if (!first)
+	{
 		return (NULL);
+	}
 	first->cmd_id = 2;
 	cmd = first;
 	while (i < pipex->cmd_count - 1)
 	{
 		new = cmd_new(pipex->argvs[3 + i], pipex->path);
+		if(!new)
+		{
+			free_cmd_list(first);
+			return(NULL);
+		}
+		
+		//------------------------------------------------
 		new->cmd_id = i + 3;
 		cmd->next = new;
 		cmd = new;
 		i++;
 	}
+	cmd->next = NULL; //???
 	return (first);
 }
 
@@ -101,6 +97,7 @@ char	**get_path(char **env)
 		if (ft_strncmp(env[i], "PATH=", 5) == 0)
 		{
 			path_var = ft_strdup(env[i] + 5);
+			// printf("%s\n", path_var);
 			break ;
 		}
 		i++;
@@ -109,6 +106,8 @@ char	**get_path(char **env)
 	{
 		paths = ft_split(path_var, ':');
 		free(path_var);
+		if(!paths)
+			return(NULL);
 	}
 	return (paths);
 }
@@ -131,10 +130,27 @@ t_pipex	init_pipex(int argc, char **argv, char **env)
 	{
 		perror("Error: Cannot open OUTPUT file");
 		close(pipex.input_fd);
+		// free(pipex.path);///??????//
 		exit(EXIT_FAILURE);
 	}
 	pipex.env = env;
 	pipex.path = get_path(env);
+	if(!pipex.path)
+	{
+		perror("Error: No se pudo obtener las rutas");
+		// close(pipex.input_fd);  // Cierra el archivo de entrada
+        // close(pipex.output_fd);
+		exit(EXIT_FAILURE);
+	}
 	pipex.first_cmd = create_cmd_list(&pipex);
+	if (pipex.first_cmd == NULL)
+	{
+		free_pipex(pipex);
+		// free_cmd_list(pipex.first_cmd);
+		// free_paths(pipex);
+		// close(pipex.input_fd);
+        // close(pipex.output_fd);
+		exit(EXIT_FAILURE);
+	}
 	return (pipex);
 }

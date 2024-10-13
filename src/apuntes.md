@@ -62,3 +62,24 @@ Others: rwx -> 421
 User: rwx -> 420
 Group: rwx -> 421
 Others: rwx -> 421
+
+
+
+ ``` bash
+ if (access(new->cmd_args[0], F_OK) == -1)
+	{
+		perror("Error: Command not found F_OK ");
+//		free_split_result(new->cmd_args);
+		free(new);
+		return (NULL);
+	}
+	if (access(new->cmd_args[0], X_OK) == -1)
+	{
+		perror("Error: Permission denied  X_OK");
+//		free_split_result(new->cmd_args);
+		free(new);
+		return (NULL);
+	}
+```
+
+

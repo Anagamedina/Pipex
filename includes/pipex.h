@@ -6,7 +6,7 @@
 /*   By: anamedin <anamedin@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/19 14:27:19 by anamedin          #+#    #+#             */
-/*   Updated: 2024/10/13 17:02:47 by anamedin         ###   ########.fr       */
+/*   Updated: 2024/10/13 21:45:02 by anamedin         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -64,4 +64,5 @@ void 		free_cmd(t_cmd *cmd);
 void 		free_cmd_list(t_cmd *cmd_list);
 void 		free_paths(t_pipex pipex);
 void 		free_pipex(t_pipex pipex);
+void		free_split_result(char **result);
 #endif

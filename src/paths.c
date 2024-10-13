@@ -6,7 +6,7 @@
 /*   By: anamedin <anamedin@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/05 13:11:27 by anamedin          #+#    #+#             */
-/*   Updated: 2024/10/13 17:17:25 by anamedin         ###   ########.fr       */
+/*   Updated: 2024/10/13 23:53:54 by anamedin         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,14 +18,16 @@ char	*get_cmd_path(char *cmd, char **paths)
     char    *full_path;
     int     i;
 
-/*
- * ERRROR HEREEEEEEEEEEEEEE !!!!!!!!!!!!!!!!!!
-	if (access(cmd, X_OK) == 0)
-	{
-		printf("%s\n", cmd);
-		return (ft_strdup(cmd));
-	}
-*/
+	if (cmd[0] == '/' || cmd[0] == '.')
+    {
+        if (access(cmd, X_OK) == 0)
+        {
+            // printf("cmd:  %s\n", cmd);
+            return (ft_strdup(cmd));
+        }
+        else
+            return (NULL);
+    }
     i = 0;
     while (paths[i])
     {
@@ -40,6 +42,16 @@ char	*get_cmd_path(char *cmd, char **paths)
     return (NULL); 
 }
 
+	// if (cmd[0] == '/' || cmd[0] == '.')
+    // {
+    //     if (access(cmd, X_OK) == 0)
+    //     {
+    //         // printf("cmd:  %s\n", cmd);
+    //         return (ft_strdup(cmd));
+    //     }
+    //     else
+    //         return (NULL);
+    // }
 void print_paths(char **paths)
 {
 	int i = 0;

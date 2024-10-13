@@ -6,7 +6,7 @@
 /*   By: anamedin <anamedin@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/28 22:45:27 by anamedin          #+#    #+#             */
-/*   Updated: 2024/10/13 17:15:44 by anamedin         ###   ########.fr       */
+/*   Updated: 2024/10/14 01:01:21 by anamedin         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,12 +16,13 @@ void	free_cmd (t_cmd *cmd)
 {
 	if(cmd)
 	{
-		free(cmd->cmd_args);
+		// free(cmd->cmd_args);
+		free_split_result(cmd->cmd_args); 
 		free(cmd);
 	}
 }
 
-static void	free_split_result(char **result)
+void	free_split_result(char **result)
 {
 	int	i;
 
@@ -31,6 +32,7 @@ static void	free_split_result(char **result)
 		free(result[i]);
 		i++;
 	}
+	free(result);
 }
 
 void	free_cmd_list(t_cmd *cmd_list)
@@ -41,10 +43,24 @@ void	free_cmd_list(t_cmd *cmd_list)
 	{
 		tmp = cmd_list;
 		cmd_list = cmd_list->next;
-		free_split_result(tmp->cmd_args);
+		// free_split_result(tmp->cmd_args);
 		free_cmd(tmp);
 	}
 }
+
+
+// void	free_cmd_list(t_cmd *cmd_list)
+// {
+// 	t_cmd	*tmp;
+
+// 	while (cmd_list)
+// 	{
+// 		tmp = cmd_list;
+// 		cmd_list = cmd_list->next;
+// 		free_split_result(tmp->cmd_args);
+// 		free_cmd(tmp);
+// 	}
+// }
 
 void free_paths(t_pipex pipex)
 {
@@ -60,12 +76,15 @@ void free_paths(t_pipex pipex)
 		}
 		free(pipex.path);
 	}
+	// pipex.path = NULL;
 }
 
 void free_pipex(t_pipex pipex)
 {
-	free_paths(pipex);
-	free_cmd_list(pipex.first_cmd);
+	if (pipex.first_cmd != NULL)
+		free_cmd_list(pipex.first_cmd);
+	if (pipex.path != NULL)
+		free_paths(pipex);
 }
 
 

@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   process_execution.c                                :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: anamedin <anamedin@student.42barcelona.c>  +#+  +:+       +#+        */
+/*   By: anamedin <anamedin@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/13 13:28:28 by anamedin          #+#    #+#             */
-/*   Updated: 2024/10/13 16:47:46 by anamedin         ###   ########.fr       */
+/*   Updated: 2024/10/14 00:25:10 by anamedin         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -49,7 +49,6 @@ void execute_child(t_pipex *pipex, t_cmd *cmd, int *pipe_fd)
         perror("Error: Fork failed");
         exit(EXIT_FAILURE);
     }
-
     if (pid == 0)
         child_1(pipex, cmd, pipe_fd);
     close(pipe_fd[1]); // importamte!
@@ -88,7 +87,7 @@ void    handle_commands(t_pipex *pipex)
         write(2, "entro\n", 6);
         cmd = cmd->next;
 
-//         close(pipex->input_fd);
-//         close(pipex->output_fd);
+        // close(pipex->input_fd);
+        // close(pipex->output_fd);
     }
 }
