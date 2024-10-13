@@ -6,66 +6,45 @@
 /*   By: anamedin <anamedin@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/28 22:45:27 by anamedin          #+#    #+#             */
-/*   Updated: 2024/10/13 01:25:09 by anamedin         ###   ########.fr       */
+/*   Updated: 2024/10/13 17:15:44 by anamedin         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../includes/pipex.h"
 
-/*void free_cmd(t_cmd *cmd)
+void	free_cmd (t_cmd *cmd)
 {
-	int i;
-
-	if (cmd)
+	if(cmd)
 	{
-		if (cmd->cmd_args)
-		{
-			i = 0;
-			while (cmd->cmd_args)
-			{
-				free(cmd->cmd_args);
-				i++;
-			}
-			free(cmd->cmd_args);
-		}
+		free(cmd->cmd_args);
 		free(cmd);
 	}
 }
+
+static void	free_split_result(char **result)
+{
+	int	i;
+
+	i = 0;
+	while(result[i])
+	{
+		free(result[i]);
+		i++;
+	}
+}
+
 void	free_cmd_list(t_cmd *cmd_list)
 {
-    t_cmd	*tmp;
-	int		i;
-	
-	i = 0; 
-    tmp = cmd_list;
-    while (cmd_list->next != NULL)
-    {
+	t_cmd	*tmp;
+
+	while (cmd_list)
+	{
 		tmp = cmd_list;
 		cmd_list = cmd_list->next;
+		free_split_result(tmp->cmd_args);
 		free_cmd(tmp);
-    }
-}*/
-
-void free_cmd(t_cmd *cmd)
- {
-    if (cmd) 
-	{
-        free(cmd->cmd_args); 
-		// free(cmd->path); 
-		free(cmd);
-    }
+	}
 }
-
-void free_cmd_list(t_cmd *cmd_list) {
-    t_cmd *tmp;
-
-    while (cmd_list) {
-        tmp = cmd_list;
-        cmd_list = cmd_list->next;  // Asumiendo que tienes un campo 'next'
-        free_cmd(tmp);              // Libera el comando actual
-    }
-}
-
 
 void free_paths(t_pipex pipex)
 {
@@ -82,7 +61,6 @@ void free_paths(t_pipex pipex)
 		free(pipex.path);
 	}
 }
-
 
 void free_pipex(t_pipex pipex)
 {

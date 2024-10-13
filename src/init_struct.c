@@ -6,13 +6,13 @@
 /*   By: anamedin <anamedin@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/28 13:38:11 by anamedin          #+#    #+#             */
-/*   Updated: 2024/10/13 01:24:56 by anamedin         ###   ########.fr       */
+/*   Updated: 2024/10/13 17:12:05 by anamedin         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../includes/pipex.h"
 
-// FUNCION PARA CREAR UN NUEVO COMANDO 
+// FUNCION PARA CREAR UN NUEVO COMANDO
 t_cmd	*cmd_new(char *str, char **paths)
 {
 	t_cmd	*new;
@@ -31,11 +31,28 @@ t_cmd	*cmd_new(char *str, char **paths)
 		free(new);
 		return (NULL);
 	}
-	cmd_path = get_cmd_path(new->cmd_args[0], paths); 
+	//-----------------------------------------------------------
+	// verificacion si arcvio existe y comando
+	if (access(new->cmd_args[0], F_OK) == -1)
+	{
+		perror("Error: Command not found F_OK ");
+//		free_split_result(new->cmd_args);
+		free(new);
+		return (NULL);
+	}
+	if (access(new->cmd_args[0], X_OK) == -1)
+	{
+		perror("Error: Permission denied  X_OK");
+//		free_split_result(new->cmd_args);
+		free(new);
+		return (NULL);
+	}
+	//-----------------------------------------------------------
+	cmd_path = get_cmd_path(new->cmd_args[0], paths);
 	if (!cmd_path)
 	{
-		perror("Error: Command not found");
-		free(new->cmd_args);
+		perror("Error: Command not found hereee");
+//		free_split_result(new->cmd_args);
 		free(new);
 		return (NULL);
 	}
@@ -101,25 +118,23 @@ t_pipex	init_pipex(int argc, char **argv, char **env)
 {
 	t_pipex	pipex;
 
-  	pipex.cmd_count = (argc - 3);
-    pipex.argvs = argv;
-
-    pipex.input_fd = open(argv[1], O_RDONLY);
-    if (pipex.input_fd == -1)
-    {
-        perror("Error: Cannot open INPUT file");
-        exit(EXIT_FAILURE); 
-    }
-    pipex.output_fd = open(argv[argc - 1], O_WRONLY | O_CREAT | O_TRUNC, 0644);
-    if (pipex.output_fd == -1)
-    {
-        perror("Error: Cannot open OUTPUT file");
-        close(pipex.input_fd);
+	pipex.cmd_count = (argc - 3);
+	pipex.argvs = argv;
+	pipex.input_fd = open(argv[1], O_RDONLY);
+	if (pipex.input_fd == -1)
+	{
+		perror("Error: Cannot open INPUT file");
 		exit(EXIT_FAILURE);
 	}
-    pipex.env = env;
-    pipex.path = get_path(env); 
-    // print_paths(pipex.path);
-    pipex.first_cmd = create_cmd_list(&pipex);
-    return (pipex);
-}	
+	pipex.output_fd = open(argv[argc - 1], O_WRONLY | O_CREAT | O_TRUNC, 0644);
+	if (pipex.output_fd == -1)
+	{
+		perror("Error: Cannot open OUTPUT file");
+		close(pipex.input_fd);
+		exit(EXIT_FAILURE);
+	}
+	pipex.env = env;
+	pipex.path = get_path(env);
+	pipex.first_cmd = create_cmd_list(&pipex);
+	return (pipex);
+}

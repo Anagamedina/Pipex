@@ -3,12 +3,13 @@
 /*                                                        :::      ::::::::   */
 /*   process_execution.c                                :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: anamedin <anamedin@student.42.fr>          +#+  +:+       +#+        */
+/*   By: anamedin <anamedin@student.42barcelona.c>  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2024/09/28 23:08:09 by anamedin          #+#    #+#             */
-/*   Updated: 2024/10/12 23:30:36by anamedin         ###   ########.fr       */
+/*   Created: 2024/10/13 13:28:28 by anamedin          #+#    #+#             */
+/*   Updated: 2024/10/13 16:47:46 by anamedin         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
+
 #include "../includes/pipex.h"
 
 static void child_1(t_pipex *pipex, t_cmd *cmd, int *pipe_fd)
@@ -19,13 +20,10 @@ static void child_1(t_pipex *pipex, t_cmd *cmd, int *pipe_fd)
 
     dup2(pipex->input_fd, STDIN_FILENO);
     close(pipex->input_fd);
-    execve(cmd->cmd_args[0], cmd->cmd_args, pipex->argvs);
-    perror("execve failed"); 
+	execve(cmd->cmd_args[0], cmd->cmd_args, pipex->env);
+    perror("execve failed");
     exit(EXIT_FAILURE);
-
 }
-
-
 
 static void child_2(t_pipex *pipex, t_cmd *cmd, int *pipe_fd)
 {
@@ -35,7 +33,7 @@ static void child_2(t_pipex *pipex, t_cmd *cmd, int *pipe_fd)
 
     dup2(pipex->output_fd, STDOUT_FILENO);
     close(pipex->output_fd);
-    execve(cmd->next->cmd_args[0], cmd->next->cmd_args, pipex->argvs); 
+    execve(cmd->next->cmd_args[0], cmd->next->cmd_args, pipex->env);
     perror("execve failed");
     exit(EXIT_FAILURE);
 
@@ -90,7 +88,7 @@ void    handle_commands(t_pipex *pipex)
         write(2, "entro\n", 6);
         cmd = cmd->next;
 
-        // close(pipex->input_fd);
-        // close(pipex->output_fd);
+//         close(pipex->input_fd);
+//         close(pipex->output_fd);
     }
 }

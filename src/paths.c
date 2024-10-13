@@ -6,18 +6,26 @@
 /*   By: anamedin <anamedin@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/05 13:11:27 by anamedin          #+#    #+#             */
-/*   Updated: 2024/10/13 00:44:00 by anamedin         ###   ########.fr       */
+/*   Updated: 2024/10/13 17:17:25 by anamedin         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../includes/pipex.h"
 
-char    *get_cmd_path(char *cmd, char **paths)
+char	*get_cmd_path(char *cmd, char **paths)
 {
-    char    *cmd_path;
+    char	*cmd_path;
     char    *full_path;
     int     i;
 
+/*
+ * ERRROR HEREEEEEEEEEEEEEE !!!!!!!!!!!!!!!!!!
+	if (access(cmd, X_OK) == 0)
+	{
+		printf("%s\n", cmd);
+		return (ft_strdup(cmd));
+	}
+*/
     i = 0;
     while (paths[i])
     {
