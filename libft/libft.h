@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   libft.h                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: anamedin <anamedin@student.42.fr>          +#+  +:+       +#+        */
+/*   By: anamedin <anamedin@student.42barcelona.c>  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2024/01/09 18:28:11 by anamedin          #+#    #+#             */
-/*   Updated: 2024/10/14 11:24:38 by anamedin         ###   ########.fr       */
+/*   Created: 2024/10/14 11:30:43 by anamedin          #+#    #+#             */
+/*   Updated: 2024/10/14 11:30:59 by anamedin         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -43,7 +43,7 @@ void			ft_putstr_fd(char *s, int fd);
 char			**ft_split(const char *s, char c);
 char			*ft_strdup(const char *s1);
 char			*ft_strjoin(const char *s1, const char *s2);
-size_t			ft_strlen(char const *str);
+size_t			ft_strlen(const char *str);
 int				ft_strncmp(const char *s1, const char *s2, size_t n);
 char			*ft_substr(const char *s, unsigned int start, size_t len);
 
@@ -56,13 +56,13 @@ int				ft_print_string(char *str);
 int				ft_hex(unsigned long nbr, const char str);
 unsigned int	ft_unsignedint(unsigned int n);
 
-/* ************************************************************************	  */
-/*                                 GET_NEXT_LINE							  */
-/* *************************************************************************  */
+/* ************************************************************************** */
+/*                              GET_NEXT_LINE                                 */
+/* ************************************************************************** */
 
 # ifndef BUFFER_SIZE
-#define  BUFFER_SIZE 25
-#endif
+#  define BUFFER_SIZE 25
+# endif
 
 char			*ft_free(char **ptr);
 int				ft_strchr_c(char *s, char c);
