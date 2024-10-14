@@ -6,7 +6,7 @@
 /*   By: anamedin <anamedin@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/28 12:08:49 by anamedin          #+#    #+#             */
-/*   Updated: 2024/10/14 10:18:55 by anamedin         ###   ########.fr       */
+/*   Updated: 2024/10/14 10:32:05 by anamedin         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,5 +29,5 @@ int	main(int argc, char **argv, char **env)
 	}
 	handle_commands(&pipex);
 	free_pipex(pipex);
-	return (0)
+	return (0);
 }

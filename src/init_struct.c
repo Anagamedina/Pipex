@@ -6,7 +6,7 @@
 /*   By: anamedin <anamedin@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/28 13:38:11 by anamedin          #+#    #+#             */
-/*   Updated: 2024/10/14 10:18:49 by anamedin         ###   ########.fr       */
+/*   Updated: 2024/10/14 10:41:00 by anamedin         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,14 +30,8 @@ t_cmd	*cmd_new(char *str, char **paths)
 		return (NULL);
 	}
 	cmd_path = get_cmd_path(new->cmd_args[0], paths);
-
 	if (cmd_path == NULL)
-	{
-		perror("Error: Command not found here!!");
-		free_split_result(new->cmd_args);
-		free(new);
-		return (NULL);
-	}
+		return (handle_cmd_error(new));
 	free(new->cmd_args[0]);
 	new->cmd_args[0] = cmd_path;
 	new->next = NULL;
@@ -101,7 +95,25 @@ char	**get_path(char **env)
 	return (paths);
 }
 
+static int	open_files(t_pipex *pipex, char **argv, int argc)
+{
+	pipex->input_fd = open(argv[1], O_RDONLY);
+	if (pipex->input_fd == -1)
+	{
+		perror("Error: Cannot open INPUT file");
+		return (0);
+	}
+	pipex->output_fd = open(argv[argc - 1], O_WRONLY | O_CREAT | O_TRUNC, 0644);
+	if (pipex->output_fd == -1)
+	{
+		perror("Error: Cannot open OUTPUT file");
+		close(pipex->input_fd);
+		return (0);
+	}
+	return (1);
+}
 /****************** Main function  *********************/
+
 t_pipex	init_pipex(int argc, char **argv, char **env)
 {
 	t_pipex	pipex;
@@ -109,19 +121,9 @@ t_pipex	init_pipex(int argc, char **argv, char **env)
 	pipex.cmd_count = (argc - 3);
 	pipex.argvs = argv;
 	pipex.input_fd = open(argv[1], O_RDONLY);
-	if (pipex.input_fd == -1)
-	{
-		perror("Error: Cannot open INPUT file");
-		exit(EXIT_FAILURE);
-	}
-	pipex.output_fd = open(argv[argc - 1], O_WRONLY | O_CREAT | O_TRUNC, 0644);
-	if (pipex.output_fd == -1)
-	{
-		perror("Error: Cannot open OUTPUT file");
-		close(pipex.input_fd);
-		exit(EXIT_FAILURE);
-	}
 	pipex.env = env;
+	if (!open_files(&pipex, argv, argc))
+		exit(EXIT_FAILURE);
 	pipex.path = get_path(env);
 	if (!pipex.path)
 	{

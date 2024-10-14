@@ -6,7 +6,7 @@
 /*   By: anamedin <anamedin@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/13 13:28:28 by anamedin          #+#    #+#             */
-/*   Updated: 2024/10/14 10:13:36 by anamedin         ###   ########.fr       */
+/*   Updated: 2024/10/14 10:41:44 by anamedin         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -35,8 +35,6 @@ static void	child_2(t_pipex *pipex, t_cmd *cmd, int *pipe_fd)
 	perror("execve failed");
 	exit(EXIT_FAILURE);
 }
-
-
 
 void	execute_child(t_pipex *pipex, t_cmd *cmd, int *pipe_fd)
 {
@@ -86,4 +84,3 @@ void	handle_commands(t_pipex *pipex)
 		close(pipex->output_fd);
 	}
 }
-

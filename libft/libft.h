@@ -6,7 +6,7 @@
 /*   By: anamedin <anamedin@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/09 18:28:11 by anamedin          #+#    #+#             */
-/*   Updated: 2024/10/13 17:04:56 by anamedin         ###   ########.fr       */
+/*   Updated: 2024/10/14 11:24:38 by anamedin         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,16 +18,8 @@
 # include <stddef.h>
 # include <stdio.h>
 # include <string.h>
-#include <fcntl.h> 
-#include <stdarg.h>
-
-typedef struct s_list
-{
-	void			*content;
-	struct s_list	*next;
-
-}					t_list;
-
+# include <fcntl.h>
+# include <stdarg.h>
 
 /* ************************************************************************** */
 /*                                 MEMORY                                     */
@@ -35,7 +27,6 @@ typedef struct s_list
 
 void			ft_bzero(void *s, size_t n);
 void			*ft_calloc(size_t count, size_t size);
-
 
 /* ************************************************************************** */
 /*                                  PRINT                                     */
@@ -70,7 +61,7 @@ unsigned int	ft_unsignedint(unsigned int n);
 /* *************************************************************************  */
 
 # ifndef BUFFER_SIZE
-#define	 BUFFER_SIZE 25
+#define  BUFFER_SIZE 25
 #endif
 
 char			*ft_free(char **ptr);
