@@ -6,28 +6,25 @@
 /*   By: anamedin <anamedin@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/19 14:27:19 by anamedin          #+#    #+#             */
-/*   Updated: 2024/10/14 11:36:55 by anamedin         ###   ########.fr       */
+/*   Updated: 2024/10/14 14:44:17 by anamedin         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #ifndef PIPEX_H
 # define PIPEX_H
 
-# include <unistd.h>  // fork, pipe, dup2, execve, close, read, write
-# include <stdlib.h>  // malloc, free, exit
-# include <stdio.h>   // perror, printf
-# include <fcntl.h>   // open
-# include <sys/wait.h>  // wait, waitid
-# include <sys/types.h>  // pid_t
+# include <unistd.h> 
+# include <stdlib.h> 
+# include <stdio.h>
+# include <fcntl.h>
+# include <sys/wait.h>
+# include <sys/types.h>
 # include "libft.h"
 
 /********     STRUCTS      *******/
 
 typedef struct s_cmd
 {
-	// "wc -l" sería el comando y sus parámetros:
-	// cmd_args[0] = "wc"
-	// cmd_args[1] = "-l"
 	char			**cmd_args;
 	int				cmd_id;
 	int				pipe[2];

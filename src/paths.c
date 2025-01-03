@@ -6,7 +6,7 @@
 /*   By: anamedin <anamedin@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/05 13:11:27 by anamedin          #+#    #+#             */
-/*   Updated: 2024/10/14 11:22:57 by anamedin         ###   ########.fr       */
+/*   Updated: 2024/10/14 14:44:38 by anamedin         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,7 +18,6 @@ char	*get_cmd_path(char *cmd, char **paths)
 	char	*full_path;
 	int		i;
 
-	// Retorna una copia del comando si es válido
 	if (access(cmd, X_OK) == 0)
 		return (ft_strdup(cmd));
 	i = 0;
